@@ -1,0 +1,30 @@
+---
+title: "ADA Homework 2"
+author: "Samantha Rabinowitz, sar4357"
+date: "3/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Challenge 1
+
+The R code below will load the 'movies.csv' dataset from GitHub and organize the data into a tibble.
+
+```{r}
+library(tidyverse)
+
+f <- "https://raw.githubusercontent.com/difiore/ADA-datasets/master/IMDB-movies.csv"
+d <- read_csv(f, col_names = T)
+glimpse(d)
+```
+
+The following code will filter the dataset to just include movies from 1920 to 1979 and movies that are less than 4 hours long. Columns were also added to make *startYear* a new variable called *decade*.
+
+```{r}
+d %>%
+  filter(startYear >= "1920" & startYear <="1979" & runtimeMinutes < 240) %>%
+  mutate("decade"= )
+```
