@@ -24,27 +24,41 @@ glimpse(d)
 The following code will filter the dataset to just include movies from 1920 to 1979 and movies that are less than 4 hours long. Columns were also added to make **startYear** a new variable called **decade**.
 
 ```{r}
-d %>%
+d1 <- d %>%
   filter(startYear >= "1920" & startYear <="1979" & runtimeMinutes < 240) %>%
   mutate(decade = case_when(startYear >=1920 & startYear<=1929 ~ "20s",
                             startYear >=1930 & startYear<=1939 ~ "30s",
                             startYear >=1940 & startYear<=1949 ~ "40s",
                             startYear >=1950 & startYear<=1959 ~ "50s",
                             startYear >=1960 & startYear<=1969 ~ "60s",
-                            startYear >=1970 & startYear<=1979 ~ "70s")) %>%
-  glimpse()
+                            startYear >=1970 & startYear<=1979 ~ "70s"))
+d1 %>% glimpse()
 ```
 
 The code below utilizes *ggplot* to plot histograms of the distribution of **runtimeMinutes** for each decade. 
 
 ```{r}
-d %>% 
-  filter(startYear >= "1920" & startYear <="1979" & runtimeMinutes < 240) %>% 
-  mutate(decade = case_when(startYear >=1920 & startYear<=1929 ~ "20s",
-                            startYear >=1930 & startYear<=1939 ~ "30s",
-                            startYear >=1940 & startYear<=1949 ~ "40s",
-                            startYear >=1950 & startYear<=1959 ~ "50s",
-                            startYear >=1960 & startYear<=1969 ~ "60s",
-                            startYear >=1970 & startYear<=1979 ~ "70s")) %>%
+d1 %>%
   ggplot(aes(x=runtimeMinutes)) + geom_histogram(bins=60) + facet_wrap(~ decade)
 ```
+
+The R code below will compute the population mean and population standard deviation in **runtimeMinutes** for each decade and store the values in a new dataframe, *results*.
+
+```{r}
+library(radiant)
+results <- d1 %>% group_by(decade) %>% summarize(mean=mean(runtimeMinutes),
+                                      pop_sd=sdpop(runtimeMinutes))
+results %>% glimpse()
+```
+
+
+## Chanllenge 3
+
+The R code below will load the 'zombies.csv' dataset from GitHub and organize the data into a tibble.
+
+```{r}
+s <- "https://raw.githubusercontent.com/difiore/ADA-datasets/master/zombies.csv"
+t <- read_csv(s, col_names = T)
+glimpse(t)
+```
+
