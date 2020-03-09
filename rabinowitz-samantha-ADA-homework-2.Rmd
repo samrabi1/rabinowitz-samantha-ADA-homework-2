@@ -51,14 +51,37 @@ results <- d1 %>% group_by(decade) %>% summarize(mean=mean(runtimeMinutes),
 results %>% glimpse()
 ```
 
+The following code will generate a function to calculate the standard error of the mean for each decade as well as a single sample of 100 movies from each decade and calculate the sample mean and standard deviation for each decade. Additionally, the SE around each population mean for each decade will be estimated using the standard deviation and sample size of these samples.
 
-## Chanllenge 3
+```{r}
+std_error <- function(x) {
+  sd(x) / sqrt(length(x))
+}
+d1 %>% group_by(decade) %>% sample_n(100, replace=FALSE) %>% 
+  summarize(mean(runtimeMinutes), sd(runtimeMinutes),std_error(runtimeMinutes))
+```
+
+The code below will write a function to calculate the standard error of the mean for each deacde using the population standard deviation for purposes of comparison to the values obtained from the sample created above.
+
+```{r}
+pop_std_error <- function(x) {
+  sdpop(x) / sqrt(length(x))
+}
+d1 %>% group_by(decade) %>%
+  summarize(mean = mean(runtimeMinutes),
+            sdpop = sdpop(runtimeMinutes),
+            pop_se = pop_std_error(runtimeMinutes),
+            length(decade))
+```
+
+## Challenge 3
 
 The R code below will load the 'zombies.csv' dataset from GitHub and organize the data into a tibble.
 
 ```{r}
-s <- "https://raw.githubusercontent.com/difiore/ADA-datasets/master/zombies.csv"
-t <- read_csv(s, col_names = T)
-glimpse(t)
+f <- "https://raw.githubusercontent.com/difiore/ADA-datasets/master/zombies.csv"
+d <- read_csv(f, col_names = T)
+glimpse(d)
 ```
+
 
