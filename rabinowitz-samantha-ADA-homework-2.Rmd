@@ -2,7 +2,9 @@
 title: "ADA Homework 2"
 author: "Samantha Rabinowitz, sar4357"
 date: "3/3/2020"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -13,9 +15,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The R code below will load the 'movies.csv' dataset from GitHub and organize the data into a tibble.
 
-```{r}
+```{r, include=FALSE}
 library(tidyverse)
+```
 
+```{r}
 f <- "https://raw.githubusercontent.com/difiore/ADA-datasets/master/IMDB-movies.csv"
 d <- read_csv(f, col_names = T)
 glimpse(d)
@@ -44,8 +48,11 @@ d1 %>%
 
 The R code below will compute the population mean and population standard deviation in **runtimeMinutes** for each decade and store the values in a new dataframe, *results*.
 
-```{r}
+```{r, include=FALSE}
 library(radiant)
+```
+
+```{r}
 results <- d1 %>% group_by(decade) %>% summarize(mean=mean(runtimeMinutes),
                                       pop_sd=sdpop(runtimeMinutes))
 results %>% glimpse()
@@ -88,14 +95,14 @@ The code below will calculate the population mean and standard deviation for eac
 
 ```{r}
 d %>% summarize(height_mean=mean(height),
-                height_sd=sdpop(height),
                 weight_mean=mean(weight),
-                weight_sd=sdpop(weight),
                 age_mean=mean(age),
-                age_sd=sdpop(age),
                 n_zombies_mean=mean(zombies_killed),
+                ed_mean=mean(years_of_education))
+d %>% summarize(height_sd=sdpop(height),
+                weight_sd=sdpop(weight),
+                age_sd=sdpop(age),
                 n_zombies_sd=sdpop(zombies_killed),
-                ed_mean=mean(years_of_education),
                 ed_sd=sdpop(years_of_education))
 ```
 
