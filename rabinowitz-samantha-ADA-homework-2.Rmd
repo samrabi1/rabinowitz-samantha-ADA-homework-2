@@ -84,4 +84,26 @@ d <- read_csv(f, col_names = T)
 glimpse(d)
 ```
 
+The code below will calculate the population mean and standard deviation for each quantitative random variable.
 
+```{r}
+d %>% summarize(height_mean=mean(height),
+                height_sd=sdpop(height),
+                weight_mean=mean(weight),
+                weight_sd=sdpop(weight),
+                age_mean=mean(age),
+                age_sd=sdpop(age),
+                n_zombies_mean=mean(zombies_killed),
+                n_zombies_sd=sdpop(zombies_killed),
+                ed_mean=mean(years_of_education),
+                ed_sd=sdpop(years_of_education))
+```
+
+The following will utilize *ggplot2* to make scatterplots of height and weight in relation to age. 
+
+```{r}
+d %>% ggplot(aes(x=age,y=height)) + geom_point()
+d %>% ggplot(aes(x=age,y=weight)) + geom_point()
+```
+
+The scatterplot generated for height in relation to age shows a distinct positive relationship. The scatterplot generated for weight in relation to age does not show as strong of a relationship however there is still a positive tendency to the relationship between the two variables.
