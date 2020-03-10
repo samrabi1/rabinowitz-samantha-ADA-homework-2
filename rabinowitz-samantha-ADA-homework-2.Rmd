@@ -3,8 +3,8 @@ title: "ADA Homework 2"
 author: "Samantha Rabinowitz, sar4357"
 date: "3/3/2020"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
