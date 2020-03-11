@@ -121,6 +121,8 @@ calls <- rpois(520, lambda = 18)
 histogram(calls, xlim=c(0:40))
 ```
 
+The general shape of the histogram of simulated results above reflects what is seen in the Poisson probability mass function. If the simulation included a greater number of results, this histogram may more closely match what is shown in the probability ass function plot.
+
 ## Challenge 3
 
 The R code below will load the 'zombies.csv' dataset from GitHub and organize the data into a tibble.
@@ -155,3 +157,28 @@ d %>% ggplot(aes(x=age,y=weight)) + geom_point()
 
 The scatterplot generated for height in relation to age shows a distinct positive relationship. The scatterplot generated for weight in relation to age does not show as strong of a relationship however there is still a positive tendency to the relationship between the two variables.
 
+The following code will generate histograms and Q-Q plots for the numeric variables in the dataset to test for normality of the data.
+
+```{r}
+histogram(d$height, main= "Histogram of Height")
+qqnorm(d$height, main="QQ Plot of Height")
+qqline(d$height)
+
+histogram(d$weight, main= "Histogram of Weight")
+qqnorm(d$weight, main="QQ Plot of Weight")
+qqline(d$weight)
+
+histogram(d$zombies_killed, main= "Histogram of Zombies Killed")
+qqnorm(d$zombies_killed, main="QQ Plot of Zombies Killed")
+qqline(d$zombies_killed)
+
+histogram(d$years_of_education, main= "Histogram of Years of Education")
+qqnorm(d$years_of_education, main="QQ Plot of Years of Education")
+qqline(d$years_of_education)
+
+histogram(d$age, main= "Histogram of Age")
+qqnorm(d$age, main="QQ Plot of Age")
+qqline(d$age)
+```
+
+As demonstrated by the histograms and Q-Q plots above, the height, weight, and age variables seem to be drawn from a normal distribution. The plots generated for the number of zombies killed and years of education indicate that these variables are not drawn from a normal distribution.
