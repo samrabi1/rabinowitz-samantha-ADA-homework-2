@@ -3,8 +3,8 @@ title: "ADA Homework 2"
 author: "Samantha Rabinowitz, sar4357"
 date: "3/3/2020"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -72,13 +72,53 @@ The code below will write a function to calculate the standard error of the mean
 
 ```{r}
 pop_std_error <- function(x) {
-  sdpop(x) / sqrt(length(x))
+  sdpop(x) / (sqrt(100))
 }
 d1 %>% group_by(decade) %>%
   summarize(mean = mean(runtimeMinutes),
             sdpop = sdpop(runtimeMinutes),
-            pop_se = pop_std_error(runtimeMinutes),
-            length(decade))
+            pop_se = pop_std_error(runtimeMinutes))
+```
+
+The following will generate a sampling distribution of mean **runtimeMinutes** for each decade by (a) drawing 10,000 samples of 100 movies from each decade and, for each sample, (b) calculating the mean **runtimeMinutes** and the standard deviation in **runtimeMinutes**. 
+
+```{r, include=FALSE}
+library(mosaic)
+```
+
+```{r}
+k <- 1000
+n <- 100
+s <- list(length=k)
+  for (i in unique(d1$decade)) {
+    d1 %>% filter(i==decade)
+    s[[i]] <- (do(k) * sample(d1, size = n, replace = FALSE))
+  }
+head(s)
+```
+
+## Challenge 2
+
+```{r}
+ppois(13, lambda = 18)
+dpois(0, lambda = 18)
+dpois(7, lambda = 18)
+1-ppois(20, lambda = 18)
+```
+
+The probability that she will hear 13 or fewer calls is 0.1425978. The probability that she will hear no calls is 1.522998e-08. The probability that she will hear exactly 7 calls is 0.00185002. The probability tha she will hear 20 calls or more 0.2692798.
+
+The below code will plot a Poisson mass function with a lambda value of 18 over an x range of 0 to 40.
+
+```{r}
+plotDist("pois", lambda = 18, main = "Poisson Distribution\nwith lambda = 18", xlab = "x", xlim = c(0:40), ylab = "Pr(X=x)")
+```
+
+The following R code will simulate 520 (10 years of Saturday call omnitoring sessions) results from the above distribution. Following creation of these results, a histogram will be plotted to compare to the shape of the above probability mass function.
+
+```{r}
+calls <- rpois(520, lambda = 18)
+histogram(calls, xlim=c(0:40))
 ```
 
 ## Challenge 3
@@ -114,3 +154,4 @@ d %>% ggplot(aes(x=age,y=weight)) + geom_point()
 ```
 
 The scatterplot generated for height in relation to age shows a distinct positive relationship. The scatterplot generated for weight in relation to age does not show as strong of a relationship however there is still a positive tendency to the relationship between the two variables.
+
