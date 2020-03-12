@@ -89,12 +89,15 @@ library(mosaic)
 ```{r}
 k <- 1000
 n <- 100
-s <- list(length=k)
+s <- list()
+t <- list()
   for (i in unique(d1$decade)) {
-    d1 %>% filter(i==decade)
-    s[[i]] <- (do(k) * sample(d1, size = n, replace = FALSE))
+    d2 <- filter(d1, decade==i)
+    s[[i]] <- do(k) * mean(~runtimeMinutes, data = sample_n(d2, size = n, replace = FALSE))
+    t[[i]] <- do(k) * sd(~runtimeMinutes, data = sample_n(d2, size = n, replace = FALSE))
   }
-head(s)
+head(s[[1]])
+head(t[[1]])
 ```
 
 ## Challenge 2
@@ -182,3 +185,4 @@ qqline(d$age)
 ```
 
 As demonstrated by the histograms and Q-Q plots above, the height, weight, and age variables seem to be drawn from a normal distribution. The plots generated for the number of zombies killed and years of education indicate that these variables are not drawn from a normal distribution.
+
