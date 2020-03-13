@@ -98,6 +98,9 @@ t <- list()
   }
 head(s[[1]])
 head(t[[1]])
+hist(s[[1]]$mean,
+     xlab = "20s Sample Mean",
+     main = "Sampling Distribution")
 ```
 
 ## Challenge 2
@@ -186,3 +189,32 @@ qqline(d$age)
 
 As demonstrated by the histograms and Q-Q plots above, the height, weight, and age variables seem to be drawn from a normal distribution. The plots generated for the number of zombies killed and years of education indicate that these variables are not drawn from a normal distribution.
 
+The R code below will sample one subset of 30 zombie apocalypse survivors from this population and calculate the mean and standard deviation for each variable. Additionally, the standard error for each variable and a 95% confidence interval will be calculated. 
+
+```{r}
+sample1 <- d %>% sample_n(30, replace = FALSE)
+sample1_stats <- sample1 %>% summarize_if(is.numeric, list(mean=mean,sd=sd, se=std_error))
+sample1_stats %>% glimpse()
+ci_height <- sample1_stats$height_mean + c(-1, 1) * qt(1 - 0.05 / 2, df = 30 - 1) * sample1_stats$height_se
+ci_height
+ci_weight <- sample1_stats$weight_mean + c(-1, 1) * qt(1 - 0.05 / 2, df = 30 - 1) * sample1_stats$weight_se
+ci_weight
+ci_zombies_killed <- sample1_stats$zombies_killed_mean + c(-1, 1) * qt(1 - 0.05 / 2, df = 30 - 1) * sample1_stats$zombies_killed_se
+ci_zombies_killed
+ci_years_of_education <- sample1_stats$years_of_education_mean + c(-1, 1) * qt(1 - 0.05 / 2, df = 30 - 1) * sample1_stats$years_of_education_se
+ci_years_of_education
+ci_age <- sample1_stats$age_mean + c(-1, 1) * qt(1 - 0.05 / 2, df = 30 - 1) * sample1_stats$age_se
+ci_age
+```
+
+The code below will generate an additional 99 samples and calculate the means for each of these samples. These means will make up a sampling distribution for each variable. Following generation of these samples, the means and standard deviations of each sampling distribution will be calculated. Q-Q Plots for the sampling distributions were also created to test for normality in the distributions, including those for variables determined to not be normally distributed.
+
+```{r}
+x <- list()
+  for (i in 1:99) {
+    x[[i]] <- sample_n(d, 30, replace = FALSE) %>% select(-id) %>% summarize_if(is.numeric, list(mean=mean), na.rm=T)
+  }
+samp_dist <- bind_rows(x)
+samp_dist %>% summarize_all(mean)
+samp_dist %>% summarize_all(sd)
+```
